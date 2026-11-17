@@ -1,0 +1,1250 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#062a43">
+  <title>Leuchttürme – Lichter am Meer</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --navy: #062a43;
+      --deep: #041d30;
+      --ocean: #0c607a;
+      --foam: #e8f4f2;
+      --paper: #fffaf0;
+      --coral: #e66c52;
+      --sun: #ffd166;
+      --ink: #143247;
+      --muted: #58717d;
+      --shadow: 0 22px 65px rgb(3 27 44 / 20%);
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse at 18% 83%, rgb(31 128 147 / 30%), transparent 32%),
+        linear-gradient(160deg, #0b4560, var(--deep) 72%);
+      color: var(--ink);
+      font-family: "Trebuchet MS", "Avenir Next", Avenir, system-ui, sans-serif;
+    }
+
+    button { font: inherit; }
+
+    .app {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      width: 100%;
+      height: 100vh;
+      min-height: 620px;
+      padding: 18px clamp(16px, 4vw, 58px) 20px;
+    }
+
+    .topbar, .bottombar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #f5fbfb;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 54px;
+      height: 38px;
+      place-items: center;
+      border: 1px solid rgb(255 255 255 / 28%);
+      border-radius: 12px;
+      background: rgb(255 255 255 / 8%);
+      color: var(--sun);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: -.05em;
+    }
+
+    .brand-name {
+      color: #f5fbfb;
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: .04em;
+    }
+
+    .voyage-label {
+      color: #c4dce0;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    .stage {
+      position: relative;
+      width: min(1190px, 100%);
+      height: 100%;
+      min-height: 0;
+      margin: 15px auto 16px;
+      overflow: hidden;
+      border: 1px solid rgb(255 255 255 / 30%);
+      border-radius: 26px;
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+
+    .slide {
+      display: none;
+      width: 100%;
+      height: 100%;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      background: var(--paper);
+      animation: arrive .34s ease both;
+    }
+
+    .slide.active { display: block; }
+
+    @keyframes arrive {
+      from { opacity: .45; transform: translateX(12px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .slide-inner {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(320px, .92fr);
+      min-height: 100%;
+    }
+
+    .slide-inner > * { min-width: 0; }
+
+    .copy {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: clamp(30px, 5vw, 70px);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      margin: 0 0 13px;
+      color: var(--ocean);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      width: 23px;
+      height: 3px;
+      border-radius: 3px;
+      background: var(--coral);
+      content: "";
+    }
+
+    h1, h2, p { margin-top: 0; }
+
+    h1, h2 {
+      max-width: 650px;
+      margin-bottom: 17px;
+      color: var(--navy);
+      font-family: Georgia, "Times New Roman", serif;
+      font-weight: 700;
+      letter-spacing: -.035em;
+      line-height: 1.02;
+    }
+
+    h1 { font-size: clamp(42px, 6vw, 78px); }
+    h2 { font-size: clamp(34px, 4.5vw, 57px); }
+
+    .lead {
+      max-width: 560px;
+      margin-bottom: 24px;
+      color: #315364;
+      font-size: clamp(17px, 1.65vw, 20px);
+      line-height: 1.55;
+    }
+
+    .body-copy {
+      max-width: 590px;
+      color: #3c5866;
+      font-size: 16px;
+      line-height: 1.65;
+    }
+
+    .fact-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 10px;
+    }
+
+    .pill {
+      padding: 9px 13px;
+      border: 1px solid #d5e5e2;
+      border-radius: 999px;
+      background: #f3faf7;
+      color: #285164;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .picture {
+      position: relative;
+      display: flex;
+      min-height: 520px;
+      flex-direction: column;
+      margin: 0;
+      overflow: hidden;
+      background: #0b344b;
+    }
+
+    .picture img:not(.photo-inset) {
+      position: relative;
+      width: 100%;
+      height: 0;
+      min-height: 0;
+      flex: 1 1 0;
+      object-fit: cover;
+      border-radius: 16px;
+      transform: scale(1.025);
+    }
+
+    .picture img.photo-inset {
+      position: relative;
+      inset: auto;
+      width: 38%;
+      height: auto;
+      flex: 0 0 auto;
+      align-self: flex-end;
+      z-index: 1;
+      margin: -100px 20px 14px 0;
+      aspect-ratio: 1.55;
+      border: 3px solid white;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgb(3 27 44 / 30%);
+    }
+
+    .picture::after {
+      content: none;
+    }
+
+    .caption {
+      width: 100%;
+      max-width: none;
+      flex: 0 0 auto;
+      padding: 20px clamp(24px, 4vw, 48px);
+      background: var(--navy);
+      color: white;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .caption strong {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--sun);
+      font-size: 12px;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+    }
+
+    .photo-credit {
+      display: block;
+      margin-top: 8px;
+      color: #c4dce0;
+      font-size: 11px;
+    }
+
+    .photo-credit a { color: #fff1bd; }
+
+    .illustration-credit {
+      display: block;
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .hero {
+      position: relative;
+      display: flex;
+      min-height: 100%;
+      align-items: flex-end;
+      overflow: hidden;
+      background: var(--navy);
+      color: white;
+    }
+
+    .hero img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 43%;
+    }
+
+    .hero::after {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgb(3 22 38 / 90%) 0%, rgb(3 22 38 / 62%) 46%, rgb(3 22 38 / 8%) 100%),
+        linear-gradient(0deg, rgb(3 22 38 / 40%), transparent 50%);
+      content: "";
+    }
+
+    .hero-copy {
+      position: relative;
+      z-index: 1;
+      width: min(730px, 78%);
+      padding: clamp(36px, 7vw, 88px);
+    }
+
+    .hero h1 { color: white; }
+    .hero .eyebrow { color: #c8eff0; }
+    .hero .lead { max-width: 600px; color: #e2f0ef; }
+
+    .start-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 13px 19px;
+      border: 0;
+      border-radius: 999px;
+      background: var(--sun);
+      color: var(--deep);
+      cursor: pointer;
+      font-weight: 900;
+      transition: transform .2s, background .2s;
+    }
+
+    .start-button:hover { transform: translateY(-2px); background: #ffe19a; }
+
+    .feature-list {
+      display: grid;
+      gap: 12px;
+      margin: 8px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .feature-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      color: #315364;
+      line-height: 1.5;
+    }
+
+    .feature-list li::before {
+      display: grid;
+      width: 25px;
+      height: 25px;
+      flex: 0 0 25px;
+      place-items: center;
+      border-radius: 50%;
+      background: #e5f2ef;
+      color: var(--ocean);
+      content: "✓";
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .diagram-wrap {
+      display: grid;
+      min-height: 100%;
+      place-items: center;
+      padding: clamp(16px, 3vw, 34px);
+      background: #e8f5f3;
+    }
+
+    .diagram {
+      width: min(100%, 590px);
+      height: auto;
+      overflow: visible;
+    }
+
+    .beam-sweep {
+      transform-box: view-box;
+      transform-origin: 50% 23.6%;
+      animation: beam-sweep 5s ease-in-out infinite alternate;
+    }
+
+    .lens-rotor {
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: lens-rotate 7s linear infinite;
+    }
+
+    .lamp-glow { animation: lamp-glow 2.4s ease-in-out infinite; }
+
+    @keyframes beam-sweep {
+      from { transform: rotate(-17deg); opacity: .45; }
+      to { transform: rotate(17deg); opacity: .9; }
+    }
+
+    @keyframes lens-rotate {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes lamp-glow {
+      0%, 100% { opacity: .72; }
+      50% { opacity: 1; }
+    }
+
+    .scenario-slide {
+      background:
+        radial-gradient(ellipse at 50% 100%, #d7ece7, transparent 56%),
+        var(--paper);
+    }
+
+    .scenario-content {
+      display: flex;
+      min-height: 100%;
+      flex-direction: column;
+      padding: clamp(22px, 3.2vw, 42px);
+    }
+
+    .scenario-heading { margin-bottom: 20px; }
+    .scenario-heading h2 { margin-bottom: 10px; font-size: clamp(32px, 4vw, 48px); }
+    .scenario-heading .lead { max-width: 760px; margin-bottom: 0; font-size: 17px; }
+
+    .scenario-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: auto;
+    }
+
+    .scenario-card {
+      overflow: hidden;
+      border: 1px solid rgb(6 42 67 / 12%);
+      border-radius: 18px;
+      background: white;
+      box-shadow: 0 12px 30px rgb(3 27 44 / 12%);
+    }
+
+    .scene-art { display: block; width: 100%; aspect-ratio: 1.62; }
+    .scene-copy { padding: 14px 17px 17px; }
+    .scene-copy h3 {
+      margin: 0 0 6px;
+      color: var(--navy);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 20px;
+      line-height: 1.15;
+    }
+    .scene-copy p { margin: 0; color: #3c5866; font-size: 13px; line-height: 1.45; }
+    .scene-credit { display: block; margin-top: 8px; color: #58717d; font-size: 10px; }
+
+    .fog-beam {
+      transform-box: fill-box;
+      transform-origin: right center;
+      animation: fog-signal 6s ease-in-out infinite;
+    }
+    .fog-lamp { animation: fog-flash 6s ease-in-out infinite; }
+    .fog-bank { animation: fog-lift 9s ease-in-out infinite alternate; }
+    .moon-glimmer { animation: moon-glint 3s ease-in-out infinite alternate; }
+    .moon-glimmer:nth-of-type(even) { animation-delay: 1.2s; }
+    .shore-wave { animation: shore-roll 4s ease-in-out infinite alternate; }
+
+    @keyframes fog-signal {
+      0%, 22% { opacity: .03; transform: scaleX(.04); }
+      42% { opacity: .35; transform: scaleX(.35); }
+      52%, 64% { opacity: .95; transform: scaleX(1); }
+      75%, 100% { opacity: .12; transform: scaleX(.18); }
+    }
+
+    @keyframes fog-lift {
+      from { opacity: .82; }
+      to { opacity: .42; }
+    }
+
+    @keyframes fog-flash {
+      0%, 22%, 75%, 100% { opacity: .18; }
+      42% { opacity: .55; }
+      52%, 64% { opacity: 1; }
+    }
+
+    @keyframes moon-glint {
+      from { opacity: .38; }
+      to { opacity: .95; }
+    }
+
+    @keyframes shore-roll {
+      from { transform: translateX(-3px); }
+      to { transform: translateX(5px); }
+    }
+
+    .timeline {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .history-card {
+      min-height: 145px;
+      padding: 15px;
+      border: 1px solid #dbe8e4;
+      border-radius: 14px;
+      background: #f4faf7;
+    }
+
+    .history-card .date {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--coral);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .history-card strong {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--navy);
+      font-family: Georgia, serif;
+      font-size: 17px;
+    }
+
+    .history-card span:last-child {
+      color: #55707b;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .history-copy { padding-top: 32px; padding-bottom: 28px; }
+    .history-copy .lead { margin-bottom: 10px; }
+    .history-slide .slide-inner { grid-template-columns: minmax(0, 1fr); }
+    .history-link {
+      display: inline-block;
+      margin-top: 9px;
+      color: var(--ocean);
+      font-size: 11px;
+      font-weight: 800;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 2px;
+    }
+
+    .standalone-picture { min-height: 100%; }
+    .standalone-picture > img:not(.photo-inset) {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      flex: none;
+      border-radius: 0;
+      transform: none;
+      object-fit: cover;
+    }
+
+    .standalone-picture .caption {
+      position: absolute;
+      z-index: 1;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      padding-top: clamp(72px, 12vh, 130px);
+      background: linear-gradient(180deg, transparent, rgb(6 42 67 / 96%) 42%);
+    }
+
+    .quiz-stack {
+      display: grid;
+      gap: 18px;
+      margin-top: 20px;
+    }
+
+    .quiz-group {
+      display: grid;
+      gap: 10px;
+      padding: 14px 16px;
+      border: 1px solid #dfe8e3;
+      border-radius: 16px;
+      background: #f7fbfb;
+    }
+
+    .quiz-group .lead {
+      margin-bottom: 0;
+      font-size: 17px;
+    }
+
+    .quiz-options {
+      display: grid;
+      max-width: 520px;
+      gap: 10px;
+      margin: 0;
+    }
+
+    .quiz-option {
+      padding: 13px 15px;
+      border: 1px solid #d8e6e2;
+      border-radius: 12px;
+      background: white;
+      color: #294d5c;
+      cursor: pointer;
+      text-align: left;
+      transition: border-color .2s, background .2s, transform .2s;
+    }
+
+    .quiz-option:hover { transform: translateX(3px); border-color: var(--ocean); }
+    .quiz-option.correct { border-color: #3f987d; background: #e6f6ed; }
+    .quiz-option.incorrect { border-color: #d97764; background: #fff0e9; }
+
+    .quiz-feedback {
+      min-height: 26px;
+      color: var(--ocean);
+      font-weight: 800;
+    }
+
+    .bottombar { gap: 20px; }
+
+    .progress-area {
+      display: flex;
+      min-width: 0;
+      flex: 1;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .counter {
+      flex: 0 0 auto;
+      color: #d3e6e8;
+      font-size: 13px;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .progress-track {
+      width: min(260px, 38vw);
+      height: 4px;
+      overflow: hidden;
+      border-radius: 99px;
+      background: rgb(255 255 255 / 20%);
+    }
+
+    .progress-fill {
+      width: 10%;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--sun);
+      transition: width .3s ease;
+    }
+
+    .controls { display: flex; align-items: center; gap: 9px; }
+
+    .nav-button {
+      display: grid;
+      width: 43px;
+      height: 43px;
+      place-items: center;
+      border: 1px solid rgb(255 255 255 / 38%);
+      border-radius: 50%;
+      background: rgb(255 255 255 / 8%);
+      color: white;
+      cursor: pointer;
+      font-size: 20px;
+      transition: background .2s, transform .2s;
+    }
+
+    .nav-button:hover:not(:disabled) { transform: translateY(-2px); background: rgb(255 255 255 / 19%); }
+    .nav-button:disabled { opacity: .38; cursor: not-allowed; }
+
+    .dots {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      background: rgb(255 255 255 / 35%);
+      cursor: pointer;
+    }
+
+    .dot[aria-current="true"] { width: 21px; border-radius: 9px; background: var(--sun); }
+
+    button:focus-visible, a:focus-visible {
+      outline: 3px solid #ffdc72;
+      outline-offset: 3px;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    @media (max-width: 760px) {
+      body { overflow: auto; }
+      .app { height: 100svh; min-height: 580px; padding: 11px 12px 14px; }
+      .voyage-label { display: none; }
+      .stage { margin: 10px auto 12px; border-radius: 20px; }
+      .slide-inner { grid-template-columns: 1fr; }
+      .copy { padding: 30px 25px; }
+      .picture { min-height: 420px; }
+      .hero-copy { width: 100%; padding: 36px 27px; }
+      .hero::after { background: linear-gradient(0deg, rgb(3 22 38 / 90%), rgb(3 22 38 / 18%) 100%); }
+      .diagram-wrap { min-height: 360px; }
+      .scenario-content { padding: 24px 20px; }
+      .scenario-heading { margin-bottom: 16px; }
+      .scenario-grid { grid-template-columns: 1fr; gap: 12px; }
+      .scenario-card { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: stretch; }
+      .scene-art { height: 100%; min-height: 150px; aspect-ratio: auto; }
+      .scene-copy { align-self: center; padding: 14px; }
+      .scene-copy h3 { font-size: 18px; }
+      .timeline { grid-template-columns: 1fr; }
+      .history-card { min-height: 0; }
+      .history-copy { padding-top: 26px; }
+      .bottombar { gap: 10px; }
+      .dots { display: none; }
+      .progress-area { gap: 9px; }
+      .progress-track { width: min(32vw, 170px); }
+      .nav-button { width: 39px; height: 39px; }
+    }
+
+    @media (max-width: 380px) {
+      .copy { padding: 25px 20px; }
+      h1 { font-size: clamp(36px, 13vw, 44px); }
+      h2 { font-size: clamp(28px, 10vw, 36px); }
+      .brand { font-size: 13px; }
+      .scenario-content { padding: 20px 14px; }
+      .scenario-heading h2 { font-size: 28px; }
+      .scenario-card { display: block; }
+      .scene-art { height: auto; min-height: 0; aspect-ratio: 1.62; }
+    }
+
+    @media (max-height: 700px) and (min-width: 761px) {
+      .app { min-height: 540px; padding-top: 10px; padding-bottom: 12px; }
+      .stage { margin-top: 9px; margin-bottom: 10px; }
+      .copy { padding-top: 28px; padding-bottom: 28px; }
+      h1 { font-size: clamp(40px, 5.2vw, 65px); }
+      h2 { font-size: clamp(32px, 4vw, 48px); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
+      .beam-sweep, .lens-rotor, .lamp-glow { animation: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="H&P machen Schule, Folie 1">
+        <span class="brand-mark" aria-hidden="true">H&amp;P</span>
+        <span class="brand-name">machen Schule</span>
+      </a>
+      <span class="voyage-label">Leuchttürme entdecken</span>
+    </header>
+
+    <main class="stage" id="presentation" aria-label="Präsentation über Leuchttürme">
+      <section class="slide active" aria-label="Folie 1 von 12: Lichter am Meer">
+        <div class="hero">
+          <img src="assets/bow-creek-dusk.jpg" alt="Ein Leuchtturm leuchtet in der Dämmerung blau und golden zwischen dunklen Gebäuden.">
+          <div class="hero-copy">
+            <p class="eyebrow">Komm mit auf Entdeckungsreise</p>
+            <h1>Lichter am Meer</h1>
+            <p class="lead">Wie findet ein Schiff im Dunkeln den sicheren Weg? Ein Leuchtturm zeigt es ihm – mit einem Licht, das weit über das Wasser reicht.</p>
+            <button class="start-button" type="button" data-go="1">Los geht’s <span aria-hidden="true">→</span></button>
+            <small class="photo-credit">Foto: Grim23, <a href="https://commons.wikimedia.org/wiki/File:Bow_Creek_Lighthouse_dusk.JPG" target="_blank" rel="noopener noreferrer">Wikimedia Commons</a>, Lizenz <a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 3.0</a>.</small>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" aria-label="Folie 2 von 12: Was ist ein Leuchtturm?">
+        <div class="slide-inner">
+          <div class="copy">
+            <p class="eyebrow">01 · Ein Wegweiser am Wasser</p>
+            <h2>Was ist ein Leuchtturm?</h2>
+            <p class="lead">Ein Leuchtturm ist ein hoher Turm mit einem starken Licht an seiner Spitze.</p>
+            <p class="body-copy">Seeleute erkennen das Licht schon von weit draußen. So wissen sie: Hier ist die Küste, dort liegt ein Hafen – oder hier müssen wir besonders vorsichtig sein.</p>
+            <div class="fact-row"><span class="pill">hoch gebaut</span><span class="pill">gut sichtbar</span><span class="pill">hilft Schiffen</span></div>
+          </div>
+          <figure class="picture">
+            <img src="assets/red-lighthouse-coast.webp" alt="Ein rot-weißer Leuchtturm steht am Strand. Hinter ihm liegen Meer und ein kleines Schiff am Horizont.">
+            <figcaption class="caption"><strong>Rot-weiß am Strand</strong>Der Turm steht gut sichtbar an der Küste. Seine Farben helfen, ihn auch am Tag vom Himmel und vom Meer zu unterscheiden.<small class="photo-credit">Originalquelle des bereitgestellten Fotos derzeit nicht ermittelt.</small></figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="slide" aria-label="Folie 3 von 12: Was steckt im Leuchtturm?">
+        <div class="slide-inner">
+          <div class="copy">
+            <p class="eyebrow">02 · Ein Turm mit vielen Teilen</p>
+            <h2>Was steckt drin?</h2>
+            <p class="lead">Jeder Teil hat eine Aufgabe – vom starken Fuß bis zur hellen Laterne.</p>
+            <ul class="feature-list">
+              <li><span><strong>Das Fundament</strong></span></li>
+              <li><span><strong>Die Treppe</strong> führt hinauf zur Spitze. In manchen Türmen ist sie ganz schön lang!</span></li>
+              <li><span><strong>Die Laterne</strong> schützt Lampe und Linsen vor Wind und Regen.</span></li>
+              <li><span><strong>Der Balkon</strong> bietet rundherum freie Sicht auf das Meer.</span></li>
+            </ul>
+          </div>
+          <figure class="picture">
+            <img src="assets/brick-lighthouse.jpg" alt="Ein Leuchtturm ist in ein großes rotes Backsteinhaus eingebaut. Oben auf dem Turm sieht man die Laterne und einen umlaufenden Balkon.">
+            <figcaption class="caption"><strong>Turm und Zuhause</strong>Auf diesem Bild ist die Laterne oben gut zu sehen. Bei manchen Leuchttürmen wohnten die Wärter direkt im Haus darunter.<small class="photo-credit">Foto „Sea Girt Lighthouse Dusk“: tedkerwin, <a href="https://www.flickr.com/photos/tedkerwin/1699716917/" target="_blank" rel="noopener noreferrer">Flickr</a>, <a href="https://creativecommons.org/licenses/by/2.0/" target="_blank" rel="noopener noreferrer">CC BY 2.0</a>.</small></figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="slide" aria-label="Folie 4 von 12: Die Lichtmaschine">
+        <div class="slide-inner">
+          <div class="copy">
+            <p class="eyebrow">03 · Die Technik einfach erklärt</p>
+            <h2>Die Lichtmaschine</h2>
+            <p class="lead">In der Laterne bündelt eine Fresnel-Linse das Licht zu einem hellen Strahl.</p>
+            <p class="body-copy">Die Lampe leuchtet durch die besondere Linse. Bei vielen Leuchttürmen dreht sich die Optik langsam um die Lampe: Der gebündelte Strahl wandert über das Meer. Wenn er ein Schiff erreicht, sieht die Besatzung das Lichtsignal.</p>
+            <div class="fact-row"><span class="pill">Lampe → Fresnel-Linse → Lichtstrahl</span><span class="pill">Drehung lässt den Strahl wandern</span></div>
+            <small class="illustration-credit">Eigene SVG-Animation: Die Linse dreht sich und der Lichtstrahl wandert.</small>
+          </div>
+          <div class="diagram-wrap">
+            <svg class="diagram" viewBox="0 0 600 500" role="img" aria-labelledby="diagram-title diagram-desc">
+              <title id="diagram-title">So funktioniert das Licht im Leuchtturm</title>
+              <desc id="diagram-desc">Eine Animation zeigt die Lampe in der Laterne, eine rotierende Fresnel-Linse und den Lichtstrahl, der über das Meer schwenkt. Das Fundament hält den Turm stabil.</desc>
+              <defs>
+                <linearGradient id="sea" x1="0" x2="1">
+                  <stop offset="0" stop-color="#dff4fb"/>
+                  <stop offset="1" stop-color="#a6dbe9"/>
+                </linearGradient>
+                <linearGradient id="beam" x1="0" x2="1">
+                  <stop offset="0" stop-color="#ffd269" stop-opacity="0.08"/>
+                  <stop offset="0.45" stop-color="#ffd269" stop-opacity="0.9"/>
+                  <stop offset="1" stop-color="#ffd269" stop-opacity="0.08"/>
+                </linearGradient>
+                <linearGradient id="tower" x1="0" x2="1">
+                  <stop offset="0" stop-color="#ef8b74"/>
+                  <stop offset="1" stop-color="#c9594a"/>
+                </linearGradient>
+                <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur stdDeviation="7" result="b"/>
+                  <feMerge>
+                    <feMergeNode in="b"/>
+                    <feMergeNode in="SourceGraphic"/>
+                  </feMerge>
+                </filter>
+              </defs>
+
+              <g stroke-linecap="round" stroke-linejoin="round">
+                <path d="M46 432 C122 420, 170 420, 228 432 S356 444, 518 430 L575 432 L575 500 L25 500 Z" fill="url(#sea)" opacity="0.9"/>
+                <path d="M52 445 C114 436, 160 439, 220 445 S349 454, 512 440" fill="none" stroke="#5ca8bf" stroke-width="3" opacity="0.8"/>
+                <g class="beam-sweep" aria-hidden="true">
+                  <path d="M312 106 L578 60 L578 176 L312 130 Z" fill="url(#beam)"/>
+                  <path d="M312 118 L572 118" fill="none" stroke="#ffd269" stroke-width="3" opacity=".8"/>
+                </g>
+
+                <path d="M233 390 L267 185 L333 185 L370 390 Z" fill="url(#tower)" stroke="#843c38" stroke-width="3"/>
+                <path d="M223 390 H380 V418 H223 Z" fill="#0b627d"/>
+                <path d="M248 185 V158 H352 V185" fill="#f3f7fb" stroke="#123a4d" stroke-width="4"/>
+                <path d="M260 158 L277 128 H323 L340 158 Z" fill="#f5b562" stroke="#123a4d" stroke-width="4"/>
+
+                <path d="M272 128 L300 92 L328 128" fill="none" stroke="#123a4d" stroke-width="4"/>
+                <path d="M288 128 V175 M312 128 V175" stroke="#123a4d" stroke-width="4"/>
+
+                <circle class="lamp-glow" cx="300" cy="118" r="18" fill="#ffd565" filter="url(#softGlow)"/>
+                <path d="M300 90 V146 M270 118 H330 M281 102 L319 134 M319 102 L281 134" stroke="#fff4c8" stroke-width="3"/>
+                <g class="lens-rotor" aria-hidden="true">
+                  <ellipse cx="300" cy="118" rx="34" ry="25" fill="none" stroke="#fff4c8" stroke-width="3" stroke-dasharray="24 8"/>
+                  <path d="M300 91 V98" stroke="#0b627d" stroke-width="4"/>
+                </g>
+
+                <g font-family="Arial, sans-serif" fill="#143247">
+                  <text x="300" y="68" text-anchor="middle" font-size="16" font-weight="800">Lampe</text>
+                  <path d="M300 72 V90" stroke="#143247" stroke-width="2"/>
+                  <text x="395" y="190" font-size="15" font-weight="800">Fresnel-Linse</text>
+                  <text x="395" y="208" font-size="12">dreht sich um die Lampe</text>
+                  <path d="M385 193 L332 138" stroke="#143247" stroke-width="2"/>
+                  <text x="430" y="156" font-size="15" font-weight="800">Lichtstrahl</text>
+                  <text x="300" y="470" text-anchor="middle" font-size="16" fill="#355b69">Ein stabiles Fundament hält den Turm an seinem Platz.</text>
+                </g>
+
+                <path d="M210 392 H390" stroke="#184d65" stroke-width="4"/>
+                <path d="M195 350 H405" stroke="#184d65" stroke-width="3" opacity="0.7"/>
+              </g>
+            </svg>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" aria-label="Folie 5 von 12: Der Lichtstrahl">
+        <div class="slide-inner">
+          <div class="copy">
+            <p class="eyebrow">04 · Blinken mit Plan</p>
+            <h2>Ein Licht mit Geheimzeichen</h2>
+            <p class="lead">Leuchttürme blinken nicht alle gleich. Ihr Rhythmus verrät, welcher Turm es ist.</p>
+            <p class="body-copy">Manche leuchten kurz, manche lang und manche blitzen mehrmals hintereinander. Seeleute kennen diese Lichtfolge wie ein Erkennungszeichen. So können sie auch nachts den richtigen Ort finden.</p>
+            <div class="fact-row"><span class="pill">kurz · lang · kurz</span><span class="pill">Jeder Turm hat sein Muster</span></div>
+          </div>
+          <figure class="picture">
+            <img src="assets/lighthouse-beam-night.jpg" alt="Ein Leuchtturm sendet in einer dunkelblauen Nacht einen langen Lichtstrahl über das Meer. Kleine Boote sind in der Ferne zu sehen.">
+            <figcaption class="caption"><strong>Ein Licht in der Nacht</strong>Der helle Strahl hebt sich vom dunklen Himmel ab. Das besondere Blinkmuster hilft den Schiffen zu erkennen, welcher Leuchtturm vor ihnen steht.<small class="photo-credit">iStock, „Leuchtturm und Schiffe in die Nacht“, <a href="https://www.istockphoto.com/de/foto/leuchtturm-und-schiffe-in-die-nacht-gm471592849-25370961" target="_blank" rel="noopener noreferrer">Bild-ID 471592849</a> (Lizenz erforderlich).</small></figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="slide" aria-label="Folie 6 von 12: Leuchttürme an verschiedenen Orten">
+        <div class="slide-inner">
+          <div class="copy">
+            <p class="eyebrow">05 · Nicht jeder Turm ist gleich</p>
+            <h2>Wo stehen Leuchttürme?</h2>
+            <p class="lead">An einer Hafeneinfahrt, auf einer Felseninsel oder mitten im Wind an der Küste.</p>
+            <p class="body-copy">Ein Leuchtturm muss dort stehen, wo Schiffe eine Warnung oder Orientierung brauchen. Deshalb sehen Leuchttürme verschieden aus: manche sind rund und schlank, andere stehen auf breiten Mauern direkt im Wasser.</p>
+            <div class="fact-row"><span class="pill">Hafeneinfahrt</span><span class="pill">Küstenfelsen</span><span class="pill">offenes Meer</span></div>
+          </div>
+          <figure class="picture">
+            <img src="assets/lighthouse-waves.jpg" alt="Hohe Wellen brechen an einer felsigen Mole. Ein schlanker weißer Leuchtturm steht oben auf den Wellenbrechern, ein Segelboot fährt vorbei.">
+            <figcaption class="caption"><strong>Standfest im Sturm</strong>Die großen Betonblöcke bremsen die Wellen. Das kleine Zusatzbild zeigt ein Schiff neben dem Leuchtturm bei rauer See.</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="slide scenario-slide" aria-label="Folie 7 von 12: Drei Leuchtturmszenarien">
+        <div class="scenario-content">
+          <header class="scenario-heading">
+            <p class="eyebrow">06 · Licht in jeder Wetterlage</p>
+            <h2>Drei Leuchtturmszenarien</h2>
+            <p class="lead">Dämmerung, dichter Morgennebel oder Mondschein – ein Leuchtturm weist Schiffen den Weg.</p>
+          </header>
+          <div class="scenario-grid">
+            <article class="scenario-card">
+              <svg class="scene-art" viewBox="0 0 360 220" role="img" aria-labelledby="island-title island-desc">
+                <title id="island-title">Leuchtturm auf einer Felseninsel in der Abenddämmerung</title>
+                <desc id="island-desc">Ein rot-weißer Turm steht auf einer felsigen Insel. Die Sonne geht am Horizont unter und ein goldener Lichtstrahl leuchtet über das ruhige Meer.</desc>
+                <defs>
+                  <linearGradient id="island-sky" x2="0" y2="1">
+                    <stop stop-color="#39496f"/><stop offset=".52" stop-color="#e27a69"/><stop offset="1" stop-color="#f8bd79"/>
+                  </linearGradient>
+                  <linearGradient id="island-sea" x2="0" y2="1">
+                    <stop stop-color="#42657a"/><stop offset="1" stop-color="#102f49"/>
+                  </linearGradient>
+                  <linearGradient id="island-ray" x2="0" y2="1">
+                    <stop stop-color="#ffe6a0" stop-opacity=".04"/><stop offset=".5" stop-color="#ffe6a0" stop-opacity=".55"/><stop offset="1" stop-color="#ffe6a0" stop-opacity=".04"/>
+                  </linearGradient>
+                </defs>
+                <rect width="360" height="152" fill="url(#island-sky)"/>
+                <circle cx="278" cy="111" r="24" fill="#ffe2a0"/>
+                <path d="M0 147 Q70 140 138 148 T280 145 T360 150 V220 H0Z" fill="url(#island-sea)"/>
+                <path d="M0 173 Q45 167 90 173 T180 173 T270 173 T360 173 M20 199 Q55 195 90 199 T160 199 T230 199 T300 199" fill="none" stroke="#98c3c0" stroke-width="2" opacity=".55"/>
+                <path d="M205 102 L360 130 L360 160 L205 116Z" fill="url(#island-ray)"/>
+                <path d="M83 171 L112 147 L140 151 L161 126 L186 133 L211 165 L246 177 L263 220 H54Z" fill="#26394a"/>
+                <path d="M155 158 L163 95 H188 L196 158Z" fill="#f3e7d0" stroke="#26394a" stroke-width="3"/>
+                <path d="M160 132 H192 L194 145 H158Z" fill="#d85849"/>
+                <rect x="163" y="88" width="25" height="11" rx="2" fill="#f1d8ae" stroke="#26394a" stroke-width="2"/>
+                <path d="M160 88 H191 L185 80 H166Z" fill="#d85849" stroke="#26394a" stroke-width="2"/>
+                <path d="M164 80 L176 70 L188 80Z" fill="#293d53"/>
+                <circle cx="176" cy="93" r="4" fill="#fff2b7"/>
+                <path d="M142 160 H207" stroke="#a8b2a5" stroke-width="4"/>
+                <circle cx="45" cy="46" r="1.5" fill="#fff1c5"/><circle cx="89" cy="75" r="1.3" fill="#fff1c5"/>
+              </svg>
+              <div class="scene-copy">
+                <h3>Abend auf der Felseninsel</h3>
+                <p>Die Sonne versinkt im Meer. Auf der dunklen Insel leuchtet der Turm weit über die Felsen hinaus.</p>
+                <small class="scene-credit">KI-generierte SVG-Illustration</small>
+              </div>
+            </article>
+
+            <article class="scenario-card">
+              <svg class="scene-art" viewBox="0 0 360 220" role="img" aria-labelledby="fog-title fog-desc">
+                <title id="fog-title">Blinkendes Leuchtturmlicht im Morgennebel</title>
+                <desc id="fog-desc">Ein Leuchtturm auf dem Festland steht im frühen Morgennebel. Sein Lichtsignal blinkt, wird nach und nach heller und ist schließlich durch den Nebel weithin sichtbar.</desc>
+                <defs>
+                  <linearGradient id="fog-sky" x2="0" y2="1">
+                    <stop stop-color="#8499a3"/><stop offset="1" stop-color="#d5d9d3"/>
+                  </linearGradient>
+                  <linearGradient id="fog-ray" x2="1" y2="0">
+                    <stop stop-color="#fff8d5" stop-opacity=".8"/><stop offset="1" stop-color="#fff8d5" stop-opacity="0"/>
+                  </linearGradient>
+                </defs>
+                <rect width="360" height="220" fill="url(#fog-sky)"/>
+                <circle cx="301" cy="62" r="20" fill="#fff0c1" opacity=".58"/>
+                <path d="M0 156 Q55 135 112 157 T230 151 T360 155 V220 H0Z" fill="#647b7a"/>
+                <path d="M0 185 Q60 174 118 186 T240 184 T360 188 V220 H0Z" fill="#324d55"/>
+                <path class="fog-beam" d="M266 81 L43 48 L43 112 Z" fill="url(#fog-ray)"/>
+                <path d="M44 155 V112 H84 V155 M50 123 H78 V135 H50Z" fill="#53686b"/>
+                <path d="M44 112 L64 97 L84 112Z" fill="#647875"/>
+                <path d="M258 167 L270 84 H297 L309 167Z" fill="#ece7d8" stroke="#596b6a" stroke-width="3"/>
+                <path d="M264 126 H303 L305 141 H262Z" fill="#d95f51"/>
+                <rect x="267" y="75" width="33" height="13" rx="2" fill="#e9dcc0" stroke="#596b6a" stroke-width="2"/>
+                <path d="M263 76 H304 L296 66 H271Z" fill="#d95f51" stroke="#596b6a" stroke-width="2"/>
+                <path d="M269 66 L283 55 L298 66Z" fill="#53666b"/>
+                <circle class="fog-lamp" cx="283" cy="82" r="8" fill="#fff4c4" opacity=".18"/>
+                <g class="fog-bank" fill="#eef1ed">
+                  <path d="M0 82 Q25 59 58 76 Q80 49 113 72 Q136 55 158 78 Q183 67 204 87 Q232 71 253 91 Q278 75 302 92 Q333 75 360 95 V131 H0Z" opacity=".78"/>
+                  <path d="M0 140 Q28 122 58 139 Q83 117 113 139 Q141 120 171 142 Q204 121 234 144 Q268 124 301 145 Q331 128 360 146 V177 H0Z" opacity=".8"/>
+                </g>
+                <path d="M0 201 Q40 197 80 201 T160 201 T240 201 T320 201 T400 201" fill="none" stroke="#c3d1ca" stroke-width="2" opacity=".65"/>
+              </svg>
+              <div class="scene-copy">
+                <h3>Morgenlicht im Nebel</h3>
+                <p>Im dichten Dunst blinkt das Signal. Der Lichtschein wird sichtbar und weist den Schiffen den Weg durch die schlechte Sicht.</p>
+                <small class="scene-credit">KI-generierte SVG-Illustration mit Licht- und Nebelanimation</small>
+              </div>
+            </article>
+
+            <article class="scenario-card">
+              <svg class="scene-art" viewBox="0 0 360 220" role="img" aria-labelledby="moon-title moon-desc">
+                <title id="moon-title">Leuchtturm bei Vollmond über glitzerndem Meer</title>
+                <desc id="moon-desc">Ein heller Vollmond steht über einer ruhigen Nachtsee. Das Mondlicht glitzert auf den sanften Wellen neben einem rot-weißen Leuchtturm.</desc>
+                <defs>
+                  <linearGradient id="moon-sky" x2="0" y2="1">
+                    <stop stop-color="#091d3d"/><stop offset="1" stop-color="#315879"/>
+                  </linearGradient>
+                  <linearGradient id="moon-sea" x2="0" y2="1">
+                    <stop stop-color="#244e70"/><stop offset="1" stop-color="#091d35"/>
+                  </linearGradient>
+                  <radialGradient id="moon-halo">
+                    <stop stop-color="#fff6d8" stop-opacity=".45"/><stop offset="1" stop-color="#fff6d8" stop-opacity="0"/>
+                  </radialGradient>
+                </defs>
+                <rect width="360" height="153" fill="url(#moon-sky)"/>
+                <circle cx="272" cy="59" r="48" fill="url(#moon-halo)"/>
+                <circle cx="272" cy="59" r="23" fill="#fff2c7"/>
+                <circle cx="263" cy="52" r="3" fill="#e9ddb7"/><circle cx="280" cy="66" r="2.5" fill="#e9ddb7"/>
+                <path d="M0 148 Q75 141 140 148 T280 146 T360 149 V220 H0Z" fill="url(#moon-sea)"/>
+                <path d="M0 166 Q45 159 88 166 T176 165 T264 166 T352 165" fill="none" stroke="#87b6d2" stroke-width="2" opacity=".62"/>
+                <g fill="#ffe8a3">
+                  <ellipse class="moon-glimmer" cx="265" cy="112" rx="17" ry="2"/>
+                  <ellipse class="moon-glimmer" cx="275" cy="126" rx="26" ry="2"/>
+                  <ellipse class="moon-glimmer" cx="267" cy="140" rx="38" ry="2"/>
+                  <ellipse class="moon-glimmer" cx="275" cy="157" rx="51" ry="2"/>
+                  <ellipse class="moon-glimmer" cx="260" cy="176" rx="37" ry="2"/>
+                  <ellipse class="moon-glimmer" cx="280" cy="194" rx="55" ry="2"/>
+                </g>
+                <path class="shore-wave" d="M0 188 Q50 178 100 188 T200 188 T300 188 T400 188 V220 H0Z" fill="#123653" opacity=".72"/>
+                <path d="M72 172 L87 106 H110 L124 172Z" fill="#f1e8d4" stroke="#132d48" stroke-width="3"/>
+                <path d="M78 142 H118 L121 154 H75Z" fill="#d95f51"/>
+                <rect x="82" y="98" width="34" height="13" rx="2" fill="#f1dfbf" stroke="#132d48" stroke-width="2"/>
+                <path d="M78 99 H120 L113 89 H85Z" fill="#d95f51" stroke="#132d48" stroke-width="2"/>
+                <path d="M83 89 L99 77 L115 89Z" fill="#273c58"/>
+                <circle cx="99" cy="104" r="5" fill="#ffe8a3"/>
+                <circle cx="42" cy="45" r="1.5" fill="#fff5d5"/><circle cx="148" cy="50" r="1.4" fill="#fff5d5"/>
+                <circle cx="212" cy="27" r="1.7" fill="#fff5d5"/><circle cx="327" cy="105" r="1.5" fill="#fff5d5"/>
+              </svg>
+              <div class="scene-copy">
+                <h3>Vollmond über dem Meer</h3>
+                <p>Bei leichtem Wellengang funkeln Mond und Leuchtturmlicht auf dem dunklen Wasser.</p>
+                <small class="scene-credit">KI-generierte SVG-Illustration</small>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide history-slide" aria-label="Folie 8 von 12: Drei Leuchttürme aus der Geschichte">
+        <div class="slide-inner">
+          <div class="copy history-copy">
+            <p class="eyebrow">07 · Drei Türme, drei Zeiten</p>
+            <h2>Leuchttürme aus der Geschichte</h2>
+            <p class="lead">Schon vor langer Zeit halfen Feuer und Türme den Seeleuten, sicher anzukommen.</p>
+            <div class="timeline">
+              <article class="history-card">
+                <span class="date">3. Jahrhundert v. Chr.</span>
+                <strong>Der Pharos von Alexandria</strong>
+                <span>Einer der berühmtesten Leuchttürme der Antike und ein Weltwunder. Er ist heute nicht mehr erhalten.</span>
+                <a class="history-link" href="https://de.wikipedia.org/wiki/Leuchtturm#Geschichte" target="_blank" rel="noopener noreferrer">Quelle: Leuchtturm (Wikipedia)</a>
+              </article>
+              <article class="history-card">
+                <span class="date">Römische Zeit</span>
+                <strong>Der Herkulesturm</strong>
+                <span>In La Coruña (heute offiziell A Coruña) in Spanien steht der römische Herkulesturm, der als ältester noch betriebener Leuchtturm gilt.</span>
+                <a class="history-link" href="https://de.wikipedia.org/wiki/Leuchtturm#Geschichte" target="_blank" rel="noopener noreferrer">Quelle: Leuchtturm (Wikipedia)</a>
+              </article>
+              <article class="history-card">
+                <span class="date">1853–1856</span>
+                <strong>Der Lindauer Leuchtturm</strong>
+                <span>Er wurde am Bodensee gebaut. Mit seinem Hafenlöwen begrüßt er Schiffe in Lindau.</span>
+                <a class="history-link" href="https://de.wikipedia.org/wiki/Leuchtturm#Geschichte" target="_blank" rel="noopener noreferrer">Quelle: Leuchtturm (Wikipedia)</a>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" aria-label="Folie 9 von 12: Lindau am Abend">
+        <figure class="picture standalone-picture">
+          <img src="assets/lindau-evening.jpg" alt="Der beleuchtete Leuchtturm von Lindau am Bodensee steht neben einem steinernen Löwen. Ein Fahrgastschiff fährt am Abend durch den Hafen.">
+          <figcaption class="caption"><strong>Lindau am Bodensee bei Abendlicht</strong>Auf dem Foto sieht man den Lindauer Leuchtturm und den steinernen Hafenlöwen am Hafeneingang. Ein Fahrgastschiff fährt zwischen den beiden Bauwerken hindurch. Die warmen Lichter spiegeln sich auf dem Wasser, während im Hintergrund die Berge im Abendlicht liegen.<small class="photo-credit">Originalquelle des bereitgestellten Fotos derzeit nicht ermittelt.</small></figcaption>
+        </figure>
+      </section>
+
+      <section class="slide" aria-label="Folie 10 von 12: Leuchttürme lotsen Schiffe">
+        <div class="slide-inner">
+          <div class="copy">
+            <p class="eyebrow">09 · Sicher durch die Nacht</p>
+            <h2>Ein Licht weist den Weg</h2>
+            <p class="lead">Leuchttürme warnen vor gefährlichen Stellen und zeigen, wo die Küste oder der Hafen liegt.</p>
+            <p class="body-copy">Das Licht ist ein wichtiges Zeichen für Seeleute. Zusammen mit Seekarten, Bojen und modernen Navigationsgeräten hilft es ihnen, sicher zu fahren. Auch bei rauer See bleibt ein hoher Turm gut zu erkennen.</p>
+            <div class="fact-row"><span class="pill">Orientierung</span><span class="pill">Warnung</span><span class="pill">Hafen finden</span></div>
+          </div>
+          <figure class="picture">
+            <img src="assets/lighthouse-coast-art.webp" alt="Illustration eines Leuchtturms auf felsiger Küste bei Nacht. Sein goldenes Licht strahlt über das Meer; Möwen fliegen am Himmel, ein Segelboot liegt im Wasser.">
+            <figcaption class="caption"><strong>Ein Licht weist den Weg</strong>Der Leuchtturm steht auf felsiger Küste und sendet seinen Lichtstrahl über das Meer.</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="slide" aria-label="Folie 11 von 12: Leuchtturm-Quiz">
+        <div class="slide-inner">
+          <div class="copy">
+            <div class="quiz-group">
+              <p class="eyebrow">10 · Jetzt bist du dran!</p>
+              <h2>Leuchtturm-Quiz</h2>
+              <p class="lead">Was macht die Linse im Leuchtturm?</p>
+              <div class="quiz-options" role="group" aria-label="Wähle die richtige Antwort">
+                <button class="quiz-option" type="button" data-correct="false" data-feedback-correct="Richtig! Die Linse bündelt das Licht für einen hellen, weit sichtbaren Strahl." data-feedback-incorrect="Noch nicht ganz – schau dir die Zeichnung auf Folie 4 noch einmal an.">Sie macht das Wasser ruhiger.</button>
+                <button class="quiz-option" type="button" data-correct="true" data-feedback-correct="Richtig! Die Linse bündelt das Licht für einen hellen, weit sichtbaren Strahl." data-feedback-incorrect="Noch nicht ganz – schau dir die Zeichnung auf Folie 4 noch einmal an.">Sie bündelt das Licht und lenkt es weit über das Meer.</button>
+                <button class="quiz-option" type="button" data-correct="false" data-feedback-correct="Richtig! Die Linse bündelt das Licht für einen hellen, weit sichtbaren Strahl." data-feedback-incorrect="Noch nicht ganz – schau dir die Zeichnung auf Folie 4 noch einmal an.">Sie lässt den Turm schneller wachsen.</button>
+              </div>
+              <p class="quiz-feedback" aria-live="polite"></p>
+            </div>
+            <p class="body-copy">Klasse! Du hast die Linse geknackt. Gleich wartet noch eine letzte Frage über das Blinkmuster.</p>
+          </div>
+          <figure class="picture">
+            <img src="assets/lighthouse-sailing-ship.jpg" alt="Ein weißer Leuchtturm mit rotem Dach steht im türkisfarbenen Meer. Ein großer Segler mit weißen Segeln fährt ganz nah daran vorbei.">
+            <figcaption class="caption"><strong>Gute Fahrt!</strong>Ein Segelschiff passiert den Leuchtturm. Solche Wegweiser stehen genau dort, wo sie den Schiffen am besten helfen können.<small class="photo-credit">Originalquelle des bereitgestellten Fotos derzeit nicht ermittelt.</small></figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="slide" aria-label="Folie 12 von 12: Noch ein Leuchtturm-Quiz">
+        <div class="slide-inner">
+          <div class="copy">
+            <div class="quiz-group">
+              <p class="eyebrow">11 · Noch eine Frage!</p>
+              <h2>Leuchtturm-Quiz</h2>
+              <p class="lead">Warum haben Leuchttürme unterschiedliche Blinkmuster?</p>
+              <div class="quiz-options" role="group" aria-label="Wähle die richtige Antwort">
+                <button class="quiz-option" type="button" data-correct="false" data-feedback-correct="Genau! Das Blinkmuster ist wie ein Erkennungszeichen. So wissen Seeleute, welcher Leuchtturm in der Nähe ist." data-feedback-incorrect="Nicht ganz – die Lichtfolge hilft Seeleuten, einen Leuchtturm wiederzuerkennen. Schau dir Folie 5 noch einmal an.">Damit das Licht schneller über das Wasser reist.</button>
+                <button class="quiz-option" type="button" data-correct="true" data-feedback-correct="Genau! Das Blinkmuster ist wie ein Erkennungszeichen. So wissen Seeleute, welcher Leuchtturm in der Nähe ist." data-feedback-incorrect="Nicht ganz – die Lichtfolge hilft Seeleuten, einen Leuchtturm wiederzuerkennen. Schau dir Folie 5 noch einmal an.">Damit Seeleute erkennen, welcher Leuchtturm das Licht sendet.</button>
+                <button class="quiz-option" type="button" data-correct="false" data-feedback-correct="Genau! Das Blinkmuster ist wie ein Erkennungszeichen. So wissen Seeleute, welcher Leuchtturm in der Nähe ist." data-feedback-incorrect="Nicht ganz – die Lichtfolge hilft Seeleuten, einen Leuchtturm wiederzuerkennen. Schau dir Folie 5 noch einmal an.">Damit Fische den Weg zum Hafen finden.</button>
+              </div>
+              <p class="quiz-feedback" aria-live="polite"></p>
+            </div>
+            <p class="body-copy">Richtig stark! Jetzt weißt du, wie Leuchttürme Licht bündeln und mit ihrem Blinkmuster Schiffe lotsen. Gute Reise, kleine Entdeckerin und kleiner Entdecker!</p>
+          </div>
+          <figure class="picture">
+            <img src="assets/lighthouse-day-photo.png" alt="Ein hoher rot-oranger Leuchtturm mit grünem Leuchtfeuer steht auf einer felsigen Küste am Meer.">
+            <figcaption class="caption"><strong>Leuchtturm am Meer</strong>Der rot-orange Turm steht auf einem Felsen und ist schon am Tag gut zu erkennen.</figcaption>
+          </figure>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="bottombar">
+      <div class="progress-area">
+        <span class="counter" id="counter" aria-live="polite">01 / 12</span>
+        <div class="progress-track" role="progressbar" aria-label="Fortschritt der Präsentation" aria-valuemin="1" aria-valuemax="12" aria-valuenow="1">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+      </div>
+      <nav class="controls" aria-label="Foliensteuerung">
+        <div class="dots" id="dots" aria-label="Folie auswählen"></div>
+        <button class="nav-button" id="previous" type="button" aria-label="Vorherige Folie" disabled>‹</button>
+        <button class="nav-button" id="next" type="button" aria-label="Nächste Folie">›</button>
+      </nav>
+    </footer>
+    <p class="sr-only" id="slide-announcement" aria-live="polite"></p>
+  </div>
+
+  <script>
+    (() => {
+      const slides = Array.from(document.querySelectorAll(".slide"));
+      const previous = document.getElementById("previous");
+      const next = document.getElementById("next");
+      const counter = document.getElementById("counter");
+      const progressFill = document.getElementById("progress-fill");
+      const progress = document.querySelector(".progress-track");
+      const dots = document.getElementById("dots");
+      const announcement = document.getElementById("slide-announcement");
+      let current = 0;
+
+      slides.forEach((slide, index) => {
+        const dot = document.createElement("button");
+        dot.className = "dot";
+        dot.type = "button";
+        dot.setAttribute("aria-label", `Folie ${index + 1} anzeigen`);
+        dot.addEventListener("click", () => showSlide(index));
+        dots.append(dot);
+      });
+
+      const dotButtons = Array.from(dots.querySelectorAll(".dot"));
+
+      function showSlide(index) {
+        current = Math.max(0, Math.min(index, slides.length - 1));
+        slides.forEach((slide, slideIndex) => {
+          const active = slideIndex === current;
+          slide.classList.toggle("active", active);
+          slide.setAttribute("aria-hidden", String(!active));
+        });
+        dotButtons.forEach((dot, dotIndex) => {
+          dot.setAttribute("aria-current", String(dotIndex === current));
+        });
+        previous.disabled = current === 0;
+        next.disabled = current === slides.length - 1;
+        counter.textContent = `${String(current + 1).padStart(2, "0")} / ${String(slides.length).padStart(2, "0")}`;
+        progressFill.style.width = `${((current + 1) / slides.length) * 100}%`;
+        progress.setAttribute("aria-valuenow", String(current + 1));
+        announcement.textContent = slides[current].getAttribute("aria-label");
+        slides[current].scrollTop = 0;
+      }
+
+      previous.addEventListener("click", () => showSlide(current - 1));
+      next.addEventListener("click", () => showSlide(current + 1));
+      document.querySelector("[data-go]").addEventListener("click", () => showSlide(1));
+
+      document.addEventListener("keydown", (event) => {
+        if (event.altKey || event.ctrlKey || event.metaKey) return;
+        if (event.key === "ArrowRight" || event.key === "PageDown") showSlide(current + 1);
+        if (event.key === "ArrowLeft" || event.key === "PageUp") showSlide(current - 1);
+        if (event.key === "Home") showSlide(0);
+        if (event.key === "End") showSlide(slides.length - 1);
+      });
+
+      document.querySelectorAll(".quiz-group").forEach((group) => {
+        const buttons = group.querySelectorAll(".quiz-option");
+        const feedback = group.querySelector(".quiz-feedback");
+
+        buttons.forEach((option) => {
+          option.addEventListener("click", () => {
+            buttons.forEach((item) => item.classList.remove("correct", "incorrect"));
+            const correct = option.dataset.correct === "true";
+            option.classList.add(correct ? "correct" : "incorrect");
+
+            if (feedback) {
+              const message = correct ? option.dataset.feedbackCorrect : option.dataset.feedbackIncorrect;
+              feedback.textContent = message || "";
+            }
+          });
+        });
+      });
+
+      showSlide(0);
+    })();
+  </script>
+</body>
+</html>
